@@ -12,7 +12,7 @@ const saleSchema = new mongoose.Schema({
     tonnage:{
         type:Number,
         required:true,
-        min:4
+        min:1000
     },
     salesAgentName:{
         type:String,
@@ -84,7 +84,7 @@ const CreditSale = Sale.discriminator("CreditSale", new mongoose.Schema({
     nationalId:{
         type:String,
         required:true,
-        match: /^[A-Z]{2}\d{12}$/
+        match: /^(CM|CF)\d{12}$/
     }
 }))
 

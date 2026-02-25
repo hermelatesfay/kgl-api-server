@@ -21,7 +21,24 @@ const options = {
         scheme: "bearer",
         bearerFormat: "JWT"
     }
-  }
+  },
+     components: {
+      schemas: {
+        users: {
+          type: "object",
+          required: ["username"],
+          properties: {
+            username: { type: "string" },
+            
+            role: {
+              type: "string",
+              enum: ["Manager", "Sales agent", "Director"]
+            }
+          }
+        }
+      }
+    }
+  
 }
   },
   apis: [path.join(__dirname, "./routers/*.js")]  //  This reads documentation from routes

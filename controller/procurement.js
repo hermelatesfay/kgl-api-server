@@ -8,13 +8,13 @@ const createProcurement = async (req, res) => {
       createdBy: req.user.id
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Procurement created successfully",
       procurement
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message
     });
   }
@@ -24,11 +24,9 @@ const createProcurement = async (req, res) => {
 const getProcurement = async (req, res) => {
   try {
     let procurement = await procurementModel.find();
-    res.json(procurement);
-    res.status(200);
+    return res.json(procurement).status(200);
   } catch (err) {
-    res.json({ message: "Failed to get procurement" });
-    res.status(400);
+    return res.json({ message: "Failed to get procurement" }).status(400);
   }
 }
 
@@ -42,15 +40,12 @@ const updateProcurementByID = async (req, res) => {
     });
 
     if (updateProcurement) {
-      res.json({ message: "Update Successful", updateProcurement });
-      res.status(200);
+      return res.json({ message: "Update Successful", updateProcurement }).status(200);
     } else {
-      res.json({ message: "Failed to update procurement" });
-      res.status(400);
+      return res.json({ message: "Failed to update procurement" }).status(400);
     }
   } catch (err) {
-    res.json({ message: "Failed to update procurement", err });
-    res.status(400);
+    return res.json({ message: "Failed to update procurement", err }).status(400);
   }
 }
 
@@ -62,15 +57,12 @@ const deleteProcurementByID = async (req, res) => {
     let deleteProcurement = await procurementModel.findByIdAndDelete(id);
 
     if (deleteProcurement) {
-      res.json({ message: "Procurement deleted successfully" });
-      res.status(200);
+      return res.json({ message: "Procurement deleted successfully" }).status(200);
     } else {
-      res.json({ message: "Failed to delete procurement" });
-      res.status(400);
+      return res.json({ message: "Failed to delete procurement" }).status(400);
     }
   } catch (error) {
-    res.json({ message: "Failed to delete procurement", error });
-    res.status(400);
+    return res.json({ message: "Failed to delete procurement", error }).status(400);
   }
 }
 

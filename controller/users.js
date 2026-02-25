@@ -6,11 +6,11 @@ const getUser = async(req,res)=>{
         const user = await userModel.find()
         
         if(!user){
-            res.status(404).json({message:"User not found"})
+            return res.status(404).json({message:"User not found"})
         }
-        res.status(200).json({message:"Users found successfully",user})
+        return res.status(200).json({message:"Users found successfully",user})
     }catch(err){
-        res.status(404).json({message:"Users not found",err})
+        return res.status(404).json({message:"Users not found",err})
     }
 }
 
@@ -22,12 +22,12 @@ const updateUser = async(req,res)=>{
 
         let updateUser = await userModel.findByIdAndUpdate(id,body,{new:true})
         if(updateUser){
-            res.status(200).json({message:"Update successful",updateUser})
+            return res.status(200).json({message:"Update successful",updateUser})
         }else{
-            res.status(400).json({message:"Failed to update user"})
+            return res.status(400).json({message:"Failed to update user"})
         }
     }catch(err){
-        res.status(400).json({message:"Failed to update user"})
+        return res.status(400).json({message:"Failed to update user"})
     }
 }
 
@@ -37,12 +37,12 @@ const deleteUser = async(req,res)=>{
         const id = req.params.id
         let deleteUser = await userModel.findByIdAndDelete(id)
         if(deleteUser){
-            res.status(200).json({message:"User deleted Successfully"})
+            return res.status(200).json({message:"User deleted Successfully"})
         }else{
-            res.status(400).json({message:"Failed to delete user"})
+            return res.status(400).json({message:"Failed to delete user"})
         }
     }catch(err){
-        res.status(400).json({message:"Failed to delete user"})
+        return res.status(400).json({message:"Failed to delete user"})
     }
 }
 

@@ -24,12 +24,12 @@ let procurementSchema = new mongoose.Schema({
     tonnage:{
         type:Number,
         required:true,
-        minimum:3
+        min:100
     },
     cost:{
         type:Number,
         required:true,
-        minlength:5
+        min:10000
     },
     dealerName:{
         type:String,

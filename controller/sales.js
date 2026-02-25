@@ -21,13 +21,13 @@ const createSale = async (req, res) => {
       salesAgent: req.user.id
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Sale created successfully",
       sale
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: "Error creating sale",
       error: error.message
     });
@@ -39,12 +39,11 @@ const getSales = async (req, res) => {
   try {
     const sales = await Sale.find();
     if (!sales) {
-      res.json({ message: "Sales not found" });
-      res.status(400);
+      return res.json({ message: "Sales not found" }).status(400);
     }
-    res.status(200).json({ message: "sales found successfully", sales });
+    return res.status(200).json({ message: "sales found successfully", sales });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 }
 
@@ -56,12 +55,12 @@ const updateSale = async (req, res) => {
 
     let updateSale = await Sale.findByIdAndUpdate(id, body, { new: true });
     if (updateSale) {
-      res.status(200).json({ message: "Updated successfully", updateSale });
+      return res.status(200).json({ message: "Updated successfully", updateSale });
     } else {
-      res.status(400).json({ message: "Failed to update sale" });
+      return res.status(400).json({ message: "Failed to update sale" });
     }
   } catch (err) {
-    res.status(400).json({ message: "Failed to update sale", err });
+    return res.status(400).json({ message: "Failed to update sale", err });
   }
 }
 
@@ -74,14 +73,12 @@ const deleteSale = async (req, res) => {
     let deleteSales = await Sale.findByIdAndDelete(id);
 
     if (deleteSales) {
-      res
-        .status(200)
-        .json({ message: "Sales deleted successfully", deleteSales });
+      return res.status(200).json({ message: "Sales deleted successfully", deleteSales });
     } else {
-      res.status(400).json({ message: "Failed to delete sales" });
+      return res.status(400).json({ message: "Failed to delete sales" });
     }
   } catch (err) {
-    res.status(400).json({ message: "Failed to delete sales", err });
+    return res.status(400).json({ message: "Failed to delete sales", err });
   }
 }
 
