@@ -2,29 +2,27 @@ const mongoose = require("mongoose");
 
 
 let procurementSchema = new mongoose.Schema({
-    nameOfProduce:{
-        type: String,
-        required: true,
-        match:/^[a-zA-Z0-9]+$/
+   
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "products",
+      required: true
     },
-    typeOfProduce:{
+    produceType:{
         type:String,
         required:true,
         minlength:2,
         match:/^[a-zA-Z]+$/
     },
-    date:{
-        type:Date,
-        required:true
-    },
-    time:{
+    dateAndTime:{
         type:String,
         required:true
     },
+   
     tonnage:{
         type:Number,
         required:true,
-        min:100
+        min:1000
     },
     cost:{
         type:Number,
@@ -49,10 +47,6 @@ let procurementSchema = new mongoose.Schema({
         type:String,
         required:true,
         match:/^(\+256|256|0)7\d{8}$/
-    },
-    sellingPrice:{
-        type:Number,
-        required:true
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

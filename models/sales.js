@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
 
-const options = {discriminatorKey:"saleType", timestamp:true};
+const options = {discriminatorKey:"saleType", timestamps:true};
 
 
 //Base sale schema
 const saleSchema = new mongoose.Schema({
-    produceName:{
-        type:String,
-        required:true
+   
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "products",
+      required: true
     },
     tonnage:{
         type:Number,
@@ -18,8 +20,22 @@ const saleSchema = new mongoose.Schema({
         type:String,
         required:true,
         minlength:2,
-        match:/^[a-zA-Z0-9]+$/
+        match:/^[a-zA-Z0-9]+\s[a-zA-Z0-9]+$/
+    },
+    branch:{
+        type:String,
+        enum:["Maganjo","Matugga"],
+        required:true
+    },
+    produceType:{
+        type:String,
+        required:true
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users"
     }
+
 }, options)
 
 const Sale = mongoose.model("sales",saleSchema);
@@ -27,7 +43,7 @@ const Sale = mongoose.model("sales",saleSchema);
 
 //Cash sale schema
 const cashSale = Sale.discriminator("cashSale", new mongoose.Schema({
-    amountPaid:{
+    cashamountPaid:{
         type:Number,
         required:true,
         min:10000
@@ -40,6 +56,10 @@ const cashSale = Sale.discriminator("cashSale", new mongoose.Schema({
     },
     date:{
         type:Date,
+        required:true
+    },
+    paymentMethod:{
+        type:String,
         required:true
     }
 }))
@@ -65,16 +85,12 @@ const CreditSale = Sale.discriminator("CreditSale", new mongoose.Schema({
         match:/^(\+256|256|0)7\d{8}$/
     },
     amountDue:{
-        type:Number,
+        type:Number,        //remaining balance
         required:true,
         min:10000
     },
     dueDate:{
         type:Date,
-        required:true
-    },
-    produceType:{
-        type:String,
         required:true
     },
     dispatchDate:{
@@ -85,6 +101,18 @@ const CreditSale = Sale.discriminator("CreditSale", new mongoose.Schema({
         type:String,
         required:true,
         match: /^(CM|CF)\d{12}$/
+    },
+    totalAmount:{
+        type:Number         //Full sale value
+    },
+    creditamountPaid:{
+        type:Number,
+        default:0
+    },
+    paymentStatus:{
+        type:String,
+        enum:["Unpaid","Partial","Paid"],
+        default:"Unpaid"
     }
 }))
 

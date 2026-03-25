@@ -1,16 +1,44 @@
 const {procurementModel} = require("../models/procurement.js")
+const {stockModel} = require("../models/stock.js")
 
 const createProcurement = async (req, res) => {
   try {
 
+    const {product, branch, tonnage} = req.body;
+
+    const quantity = Number(tonnage);
+
+    if(isNaN(quantity) || quantity < 1000){
+      return res.status(400).json({message: "Tonnage must be a number and at least 1000 kg"})
+    }
+
     const procurement = await procurementModel.create({
-      ...req.body,
-      createdBy: req.user.id
+      ...req.body
     });
 
+    //Find stock
+    let stock = await stockModel.findOne({product, branch})
+
+    if(!stock){
+      //if no stock exists, create one
+      stock = new stockModel({
+        product,
+        branch,
+        totalProcured: quantity,
+        totalSold: 0,
+        remainingStock: quantity
+      })
+    }else{
+      //Update existing stock
+      stock.totalProcured += quantity;
+      stock.remainingStock = stock.totalProcured - stock.totalSold;
+      
+    }
+    await stock.save();
+
     return res.status(201).json({
-      message: "Procurement created successfully",
-      procurement
+      message: "Procurement recorded successfully",
+      procurement,stock
     });
 
   } catch (error) {

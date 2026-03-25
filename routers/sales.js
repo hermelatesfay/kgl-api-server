@@ -1,8 +1,9 @@
 const express = require("express");
 const { Sale, cashSale, CreditSale } = require("../models/sales.js");
 const router = express.Router();
-const {createSale,getSales,updateSale,deleteSale} = require("../controller/sales.js")
-const {authMiddleware, authorize} = require("../middleware/user.js")
+const {createSale,getSales,updateSale,deleteSale,recordCreditPayment,cancelSale,getSalesByDate} = require("../controller/sales.js")
+const {authorize} = require("../middleware/authorize.js")
+const {authMiddleware} = require("../middleware/authenticate.js")
 
 
 /**
@@ -56,5 +57,12 @@ router.patch("/:id", updateSale);
 
 
 router.delete("/:id", deleteSale);
+
+router.patch("/:id/cancel",cancelSale)
+
+
+router.post("/:id/payment",authMiddleware,authorize("Manager"),recordCreditPayment)
+
+router.get("/startDate=2026-01-01&endDate=2026-01-31",getSalesByDate)
 
 module.exports = { router };

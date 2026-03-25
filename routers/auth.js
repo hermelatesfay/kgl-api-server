@@ -35,7 +35,7 @@ router.post("/login",async(req,res)=>{
     let _user = await userModel.findOne({username})
 
     if(!_user){
-        return res.status(401).json({message:"Can't find user with provided email and password"})
+        return res.status(401).json({message:"Can't find user with provided username and password"})
     }
 
     let isPasswordCorrect = await bcrypt.compare(password, _user.password)
@@ -49,12 +49,11 @@ router.post("/login",async(req,res)=>{
 
         let token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: "1h"})
 
-        return res.status(200).json({message:"Login successful",token})
+        return res.status(200).json({message:"Login successful",token,user})
     }else{
-        return res.status(401).json({message:"Invalid credentials"})
+        return res.status(401).json({message:"Invalid username or password"})
     }
 })
-
 
 
 /**
